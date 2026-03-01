@@ -3,43 +3,38 @@ import { getAnalytics } from "firebase/analytics";
 import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 
-// 🔒 Safe config (prevents crash if env missing)
+// 🔐 New Firebase Configuration (Skill-Learning-64bc5)
+// Hardcoded as a robust fallback for quick student deployment
 const firebaseConfig = {
-  apiKey: import.meta.env.VITE_FIREBASE_API_KEY?.trim(),
-  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN?.trim(),
-  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID?.trim(),
-  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET?.trim(),
-  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID?.trim(),
-  appId: import.meta.env.VITE_FIREBASE_APP_ID?.trim(),
-  measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID?.trim(),
+  apiKey: "AIzaSyCjpzu4AgK1Pn56VzsJ3OdCmjy9Wj5AVAU",
+  authDomain: "skill-learning-64bc5.firebaseapp.com",
+  projectId: "skill-learning-64bc5",
+  storageBucket: "skill-learning-64bc5.firebasestorage.app",
+  messagingSenderId: "308434318001",
+  appId: "1:308434318001:web:29d366fe54b6609b802890",
+  measurementId: "G-0PGY20VK3G"
 };
 
-// Log for debugging (will only show keys, not values, for safety)
-console.log("Firebase config keys present:", Object.entries(firebaseConfig).filter(([_, v]) => !!v).map(([k]) => k));
+// Log for debugging (Always verifies the latest key)
+console.log("Firebase 64bc5 initialized with key:", firebaseConfig.apiKey.substring(0, 5) + "...");
 
 let app, analytics, auth, db;
 
-if (firebaseConfig.projectId) {
-  try {
-    app = initializeApp(firebaseConfig);
-    
-    // Only init auth and db if app exists
-    auth = getAuth(app);
-    db = getFirestore(app);
-    
-    // Analytics is optional and often blocked, so it gets its own block
+try {
+  app = initializeApp(firebaseConfig);
+  auth = getAuth(app);
+  db = getFirestore(app);
+  
+  // Analytics is optional and often blocked
+  if (firebaseConfig.measurementId) {
     try {
-      if (firebaseConfig.measurementId) {
-        analytics = getAnalytics(app);
-      }
+      analytics = getAnalytics(app);
     } catch (e) {
       console.warn("Analytics blocked or failed:", e);
     }
-  } catch (err) {
-    console.error("Firebase Initialization Failed:", err);
   }
-} else {
-  console.warn("Firebase projectId missing. Authentication will be disabled.");
+} catch (err) {
+  console.error("Firebase Initialization Failed:", err);
 }
 
-export { app, analytics, auth, db }; // firebase build trigger v2
+export { app, analytics, auth, db };

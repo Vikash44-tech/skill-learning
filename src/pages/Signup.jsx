@@ -6,8 +6,9 @@ import {
   Sparkles, GraduationCap, CheckCircle2,
   AlertCircle, ShieldCheck, Zap, Award, BookOpen
 } from 'lucide-react'
-import { createUserWithEmailAndPassword, updateProfile, GoogleAuthProvider, signInWithPopup } from 'firebase/auth'
-import { auth } from '../firebase'
+import { createUserWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from 'firebase/auth'
+import { doc, setDoc, serverTimestamp } from 'firebase/firestore'
+import { auth, db } from '../firebase'
 
 export default function Signup() {
   const navigate = useNavigate()
@@ -20,6 +21,22 @@ export default function Signup() {
   const [error, setError] = useState('')
   const [isProcessing, setIsProcessing] = useState(false)
   const [isGoogleProcessing, setIsGoogleProcessing] = useState(false)
+
+  // Helper to save user profile to Firestore
+  const saveUserProfile = async (fbUser, name) => {
+    try {
+      await setDoc(doc(db, "users", fbUser.uid), {
+        uid: fbUser.uid,
+        name: name || fbUser.displayName || fbUser.email.split('@')[0],
+        email: fbUser.email,
+        photoURL: fbUser.photoURL || null,
+        createdAt: serverTimestamp(),
+        role: 'student'
+      }, { merge: true });
+    } catch (err) {
+      console.error("Error saving user profile:", err);
+    }
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -35,6 +52,9 @@ export default function Signup() {
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, formData.email, formData.password);
       const fbUser = userCredential.user;
+      
+      // 🚀 Save profile to Database
+      await saveUserProfile(fbUser, formData.name);
       
       navigate('/dashboard');
     } catch (err) {
@@ -58,6 +78,9 @@ export default function Signup() {
       const provider = new GoogleAuthProvider();
       const result = await signInWithPopup(auth, provider);
       const fbUser = result.user;
+      
+      // 🚀 Save/Update profile for Google users
+      await saveUserProfile(fbUser);
       
       navigate('/dashboard');
     } catch (err) {
