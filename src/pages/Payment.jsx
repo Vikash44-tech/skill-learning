@@ -9,9 +9,11 @@ import {
 } from 'lucide-react'
 import { collection, addDoc } from 'firebase/firestore'
 import { db } from '../firebase'
+import { useAuth } from '../App'
 
 export default function Payment() {
   const navigate = useNavigate()
+  const { user } = useAuth()
   const [booking, setBooking] = useState(null)
   const [amount, setAmount] = useState('')
   const [error, setError] = useState('')
@@ -39,7 +41,6 @@ export default function Payment() {
       if (parseFloat(amount) === parseFloat(booking.totalAmount)) {
         try {
           // Save to enrolled courses in Firestore
-          const user = JSON.parse(localStorage.getItem('skill_academy_user'));
           const enrollmentData = {
             ...booking,
             id: Date.now(),
@@ -298,7 +299,7 @@ export default function Payment() {
 
                   <div className="flex flex-col gap-8 bg-indigo-600 rounded-[2.5rem] p-8 md:p-12 text-white relative overflow-hidden group">
                     <div className="absolute inset-0 bg-linear-to-r from-indigo-700 to-indigo-600" />
-                    <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 blur-[40px] rounded-full translate-x-1/3 -translate-y-1/3" />
+                    <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 blur-2xl rounded-full translate-x-1/3 -translate-y-1/3" />
                     
                     <div className="flex flex-col gap-6 relative z-10 text-center md:text-left">
                       <div className="flex flex-col gap-2">

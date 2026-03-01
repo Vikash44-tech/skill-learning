@@ -36,18 +36,7 @@ export default function Signup() {
       const userCredential = await createUserWithEmailAndPassword(auth, formData.email, formData.password);
       const fbUser = userCredential.user;
       
-      // Update the user's display name
-      await updateProfile(fbUser, { displayName: formData.name });
-      
-      localStorage.setItem('skill_academy_user', JSON.stringify({
-        name: formData.name,
-        email: fbUser.email,
-        uid: fbUser.uid
-      }));
-      localStorage.setItem('skill_academy_token', await fbUser.getIdToken());
-      
       navigate('/dashboard');
-      window.location.reload(); 
     } catch (err) {
       console.error("Firebase Signup Error details:", err);
       if (err.code === 'auth/email-already-in-use') {
@@ -70,15 +59,7 @@ export default function Signup() {
       const result = await signInWithPopup(auth, provider);
       const fbUser = result.user;
       
-      localStorage.setItem('skill_academy_user', JSON.stringify({
-        name: fbUser.displayName || 'Google User',
-        email: fbUser.email,
-        uid: fbUser.uid
-      }));
-      localStorage.setItem('skill_academy_token', await fbUser.getIdToken());
-      
       navigate('/dashboard');
-      window.location.reload(); 
     } catch (err) {
       console.error("Google Signin Error:", err);
       setError(`Google Signin Error: ${err.message}`);
@@ -102,7 +83,7 @@ export default function Signup() {
           
           <div className="relative z-10 flex flex-col gap-16 h-full justify-between">
             <Link to="/" className="flex items-center gap-3">
-              <div className="bg-white/10 backdrop-blur-md p-3 rounded-[1.5rem] border border-white/20">
+              <div className="bg-white/10 backdrop-blur-md p-3 rounded-3xl border border-white/20">
                 <GraduationCap size={32} />
               </div>
               <span className="text-2xl font-black tracking-tight">SkillRise</span>
@@ -239,7 +220,7 @@ export default function Signup() {
                  <button 
                    type="submit" 
                    disabled={isProcessing}
-                   className="btn-primary w-full py-5 rounded-[2rem] flex items-center justify-center gap-3 text-lg font-black active:scale-[0.98] transition-all relative overflow-hidden"
+                   className="btn-primary w-full py-5 rounded-4xl flex items-center justify-center gap-3 text-lg font-black active:scale-[0.98] transition-all relative overflow-hidden"
                  >
                    {isProcessing ? (
                      <div className="flex items-center gap-4">
@@ -278,7 +259,7 @@ export default function Signup() {
                </button>
 
                <div className="relative flex items-center justify-center pt-2">
-                  <div className="absolute inset-x-0 h-[1px] bg-slate-100" />
+                  <div className="absolute inset-x-0 h-px bg-slate-100" />
                   <span className="relative z-10 bg-white px-4 text-xs font-black uppercase tracking-widest text-slate-300">Already a Student?</span>
                </div>
 

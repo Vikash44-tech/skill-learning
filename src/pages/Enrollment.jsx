@@ -2,6 +2,7 @@ import { useParams, useNavigate } from 'react-router-dom'
 import { courses } from '../data/coursesData'
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
+import { useAuth } from '../App'
 import { 
   ArrowLeft, CreditCard, ShoppingBag, 
   CheckCircle2, Users, Receipt, Calendar, 
@@ -11,8 +12,8 @@ import {
 export default function Enrollment() {
   const { id } = useParams()
   const navigate = useNavigate()
+  const { user } = useAuth()
   const course = courses.find(c => c.id === parseInt(id))
-  const user = JSON.parse(localStorage.getItem('skill_academy_user'))
 
   const [formData, setFormData] = useState({
     name: user?.name || '',

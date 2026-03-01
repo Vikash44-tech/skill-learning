@@ -27,16 +27,8 @@ export default function Login() {
       const userCredential = await signInWithEmailAndPassword(auth, formData.email, formData.password);
       const fbUser = userCredential.user;
       
-      localStorage.setItem('skill_academy_user', JSON.stringify({
-        name: fbUser.displayName || fbUser.email.split('@')[0],
-        email: fbUser.email,
-        uid: fbUser.uid
-      }));
-      localStorage.setItem('skill_academy_token', await fbUser.getIdToken());
-      
       const from = location.state?.from || '/dashboard';
       navigate(from);
-      window.location.reload();
     } catch (err) {
       console.error("Firebase Login Error details:", err);
       if (err.code === 'auth/invalid-credential' || err.code === 'auth/wrong-password' || err.code === 'auth/user-not-found') {
@@ -55,15 +47,8 @@ export default function Login() {
       const provider = new GoogleAuthProvider();
       const result = await signInWithPopup(auth, provider);
       const fbUser = result.user;
-      localStorage.setItem('skill_academy_user', JSON.stringify({
-        name: fbUser.displayName || fbUser.email.split('@')[0],
-        email: fbUser.email,
-        uid: fbUser.uid
-      }));
-      localStorage.setItem('skill_academy_token', await fbUser.getIdToken());
       const from = location.state?.from || '/dashboard';
       navigate(from);
-      window.location.reload();
     } catch (err) {
       console.error("Google Login Error:", err);
       setError(`Google sign-in failed: ${err.message}`);
@@ -101,7 +86,7 @@ export default function Login() {
           
           <div className="relative z-10 flex flex-col gap-16 h-full justify-between">
             <Link to="/" className="flex items-center gap-3">
-              <div className="bg-white/10 backdrop-blur-md p-3 rounded-[1.5rem] border border-white/20">
+              <div className="bg-white/10 backdrop-blur-md p-3 rounded-3xl border border-white/20">
                 <GraduationCap size={32} />
               </div>
               <span className="text-2xl font-black tracking-tight">SkillRise</span>
@@ -191,7 +176,13 @@ export default function Login() {
                    <div className="flex flex-col gap-3 group">
                      <div className="flex items-center justify-between px-1">
                        <label className="text-xs font-black uppercase tracking-widest text-slate-400">Password</label>
-                       <a href="#" className="text-xs font-black uppercase tracking-widest text-indigo-600 hover:text-indigo-700">Forgot?</a>
+                        <button 
+                          type="button"
+                          onClick={handleForgotPassword}
+                          className="text-xs font-black uppercase tracking-widest text-indigo-600 hover:text-indigo-700"
+                        >
+                          Forgot?
+                        </button>
                      </div>
                      <div className="relative">
                         <input 
@@ -210,7 +201,7 @@ export default function Login() {
                  <button 
                    type="submit" 
                    disabled={isProcessing}
-                   className="btn-primary w-full py-5 rounded-[2rem] flex items-center justify-center gap-3 text-lg font-black active:scale-[0.98] transition-all relative overflow-hidden"
+                   className="btn-primary w-full py-5 rounded-4xl flex items-center justify-center gap-3 text-lg font-black active:scale-[0.98] transition-all relative overflow-hidden"
                  >
                    {isProcessing ? (
                      <div className="flex items-center gap-4">

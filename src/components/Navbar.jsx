@@ -2,11 +2,12 @@ import { Link, useNavigate } from 'react-router-dom'
 import { GraduationCap, LogIn, LogOut, User, Menu, X, Search, BookOpen } from 'lucide-react'
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { useAuth } from '../App'
 
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const user = JSON.parse(localStorage.getItem('skill_academy_user'));
+  const { user, logout } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -17,11 +18,9 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const handleLogout = () => {
-    localStorage.removeItem('skill_academy_user');
-    localStorage.removeItem('skill_academy_token');
+  const handleLogout = async () => {
+    await logout();
     navigate('/login');
-    window.location.reload();
   };
 
   return (

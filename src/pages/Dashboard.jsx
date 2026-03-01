@@ -12,10 +12,11 @@ import {
 } from 'lucide-react'
 import { collection, query, where, getDocs } from 'firebase/firestore'
 import { db } from '../firebase'
+import { useAuth } from '../App'
 
 export default function Dashboard() {
   const navigate = useNavigate()
-  const user = JSON.parse(localStorage.getItem('skill_academy_user'))
+  const { user, logout } = useAuth()
   const [enrolledCourses, setEnrolledCourses] = useState([])
   const [activeTab, setActiveTab] = useState('courses')
 
@@ -44,11 +45,9 @@ export default function Dashboard() {
     fetchEnrollments();
   }, [user?.email, navigate]);
 
-  const handleLogout = () => {
-    localStorage.removeItem('skill_academy_user');
-    localStorage.removeItem('skill_academy_token');
+  const handleLogout = async () => {
+    await logout();
     navigate('/login');
-    window.location.reload();
   };
 
   if (!user) return null;

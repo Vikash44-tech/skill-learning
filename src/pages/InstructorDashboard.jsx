@@ -8,10 +8,11 @@ import {
   CheckCircle2, AlertCircle, Clock
 } from 'lucide-react'
 import { courses } from '../data/coursesData'
+import { useAuth } from '../App'
 
 export default function InstructorDashboard() {
   const navigate = useNavigate()
-  const user = JSON.parse(localStorage.getItem('skill_academy_user'))
+  const { user, logout } = useAuth()
   const [activeTab, setActiveTab] = useState('overview')
   const [instructorCourses, setInstructorCourses] = useState([])
 
@@ -24,11 +25,9 @@ export default function InstructorDashboard() {
     setInstructorCourses(courses.slice(0, 3))
   }, [user, navigate])
 
-  const handleLogout = () => {
-    localStorage.removeItem('skill_academy_user')
-    localStorage.removeItem('skill_academy_token')
+  const handleLogout = async () => {
+    await logout()
     navigate('/login')
-    window.location.reload()
   }
 
   if (!user) return null
