@@ -260,7 +260,7 @@ export default function CourseDetails() {
                     <button className="flex items-center gap-2 text-slate-400 hover:text-indigo-600 font-bold transition-colors text-xs uppercase tracking-widest">
                       <Share2 size={16} /> Share
                     </button>
-                    <div className="w-[1px] h-4 bg-slate-200" />
+                    <div className="w-px h-4 bg-slate-200" />
                     <button className="flex items-center gap-2 text-slate-400 hover:text-indigo-600 font-bold transition-colors text-xs uppercase tracking-widest">
                        Apply Coupon
                     </button>
